@@ -1,0 +1,13 @@
+name: Huggingface Keep-Alive
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Huggingface Keep-Alive Ping
+        run: |
+          curl "https://tenfyzhong-n8n-free.hf.space"
