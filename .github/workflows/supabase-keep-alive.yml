@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Supabase Keep-Alive Ping
         run: |
-          curl -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/keep_alive?select=*" \
+          curl "${{ secrets.SUPABASE_URL }}/rest/v1/keep-alive?select=*" \
             -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
