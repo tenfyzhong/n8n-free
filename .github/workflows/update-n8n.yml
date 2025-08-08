@@ -1,0 +1,62 @@
+name: Check for n8n Updates and Sync to Hugging Face Space
+
+on:
+  schedule:
+    # Run at 3:00 AM (UTC) every day
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      # This is key: Grant this job permission to push commits to the repository
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history to solve the "shallow update not allowed" error
+          fetch-depth: 0
+
+      - name: Get latest n8n version
+        id: get_version
+        run: |
+          LATEST_VERSION=$(curl -s "https://github.com/n8n-io/n8n/releases.atom" | grep -oP '<title>n8n@\K[0-9.]+' | head -n 1)
+          echo "Latest n8n version is: $LATEST_VERSION"
+          echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get current version from Dockerfile
+        id: get_current_version
+        run: |
+          CURRENT_VERSION=$(grep -oP 'n8n-io/n8n:\K[0-9.]+' Dockerfile)
+          echo "Current version in Dockerfile is: $CURRENT_VERSION"
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Compare versions and update Dockerfile
+        id: update_dockerfile
+        if: steps.get_version.outputs.version != steps.get_current_version.outputs.version && steps.get_version.outputs.version != ''
+        run: |
+          echo "New version found. Updating Dockerfile..."
+          sed -i "s/n8n-io\/n8n:${{ steps.get_current_version.outputs.version }}/n8n-io\/n8n:${{ steps.get_version.outputs.version }}/g" Dockerfile
+          echo "Dockerfile updated."
+          echo "updated=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if Dockerfile was changed
+        if: steps.update_dockerfile.outputs.updated == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add Dockerfile
+          git commit -m "chore: Update n8n to version ${{ steps.get_version.outputs.version }}"
+          git push
+
+      - name: Push to Hugging Face Space
+        if: steps.update_dockerfile.outputs.updated == 'true'
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add space https://tenfyzhong:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/tenfyzhong/n8n-free
+          git push space main --force
+          echo "Successfully synced to Hugging Face Space!"
