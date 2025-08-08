@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Huggingface Keep-Alive Ping
         run: |
-          curl "https://tenfyzhong-n8n-free.hf.space"
+          curl "${{ vars.HF_SPACE_URL }}"
