@@ -6,7 +6,7 @@ colorTo: gray
 sdk: docker
 pinned: false
 license: mit
-short_description: A free, self-updating n8n instance hosted on Hugging Face Spaces with a Supabase backend.
+short_description: n8n free hosted with supebase
 ---
 
 # N8n Free
