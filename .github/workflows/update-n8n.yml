@@ -30,7 +30,7 @@ jobs:
       - name: Get current version from Dockerfile
         id: get_current_version
         run: |
-          CURRENT_VERSION=$(grep -oP 'n8n-io/n8n:\K[0-9.]+' Dockerfile)
+          CURRENT_VERSION=$(grep -oP 'n8nio/n8n:\K[0-9.]+' Dockerfile)
           echo "Current version in Dockerfile is: $CURRENT_VERSION"
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
@@ -39,7 +39,7 @@ jobs:
         if: steps.get_version.outputs.version != steps.get_current_version.outputs.version && steps.get_version.outputs.version != ''
         run: |
           echo "New version found. Updating Dockerfile..."
-          sed -i "s/n8n-io\/n8n:${{ steps.get_current_version.outputs.version }}/n8n-io\/n8n:${{ steps.get_version.outputs.version }}/g" Dockerfile
+          sed -i "s/n8nio\/n8n:${{ steps.get_current_version.outputs.version }}/n8nio\/n8n:${{ steps.get_version.outputs.version }}/g" Dockerfile
           echo "Dockerfile updated."
           echo "updated=true" >> $GITHUB_OUTPUT
 
