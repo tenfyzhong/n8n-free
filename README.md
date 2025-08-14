@@ -44,6 +44,8 @@ Start by forking this repository to your own GitHub account.
 
 4. Navigate to **Project Settings > API** and find your **Project URL** and **annon public legacy API key**. You will need these in the next step.
 
+5. To ensure a secure connection to your database, you should configure SSL. In your Supabase project, go to **Project Settings > Database**. Scroll down to **SSL Configuration** and enable it.
+
 ### 3. Create a Hugging Face Space
 
 1. Go to [Hugging Face Spaces](https://huggingface.co/new-space) and create a new Space.
@@ -68,6 +70,9 @@ Start by forking this repository to your own GitHub account.
         - `WEBHOOK_URL`: Set to `https://<username>-<space>.hf.space`.
         - `N8N_HOST`: Set to `<username>-<space>.hf.space`.
         - `N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS`: Set to `true`.
+        - `N8N_DATABASE_SSL_REJECT_UNAUTHORIZED`: Set to `true`.
+        - `DB_POSTGRESDB_SSL_CA`: Set to the content of the Supabase SSL certificate.
+        - `N8N_PROXY_HOPS`: Set to `1`.
 
 ### 4. Configure GitHub Repository Secrets
 
