@@ -52,27 +52,38 @@ Start by forking this repository to your own GitHub account.
 2. Select **Docker** as the Space SDK and choose a free hardware option.
 3. Choose the forked repository from your GitHub account to deploy from.
 4. After the Space is created, go to the **Settings** tab and add the following secrets and variables:
-    a. Secrets
-        - `DB_POSTGRESDB_PASSWORD`: The supabase database password.
-        - `DB_POSTGRESDB_USER`: The supabase database user.
-        - `N8N_ENCRYPTION_KEY`: An n8n encryption key.
-    b. Variables
-        - `GENERIC_TIMEZONE`: The n8n generic timezone.
-        - `TZ`: The n8n timezone.
-        - `DB_TYPE`: Set to `postgres`.
-        - `DB_POSTGRESDB_SCHEMA`: Set to `public`.
-        - `DB_POSTGRESDB_HOST`: The supabase database host.
-        - `DB_POSTGRESDB_DATABASE`: Set to `postgres`.
-        - `DB_POSTGRESDB_PORT`: The supabase database port.
-        - `N8N_PORT`: Set to `7860`.
-        - `N8N_PROTOCOL`: Set to `https`.
-        - `N8N_EDITOR_BASE_URL`: Set to `https://<username>-<space>.hf.space`.
-        - `WEBHOOK_URL`: Set to `https://<username>-<space>.hf.space`.
-        - `N8N_HOST`: Set to `<username>-<space>.hf.space`.
-        - `N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS`: Set to `true`.
-        - `N8N_DATABASE_SSL_REJECT_UNAUTHORIZED`: Set to `true`.
-        - `DB_POSTGRESDB_SSL_CA`: Set to the content of the Supabase SSL certificate.
-        - `N8N_PROXY_HOPS`: Set to `1`.
+
+| Secret                   | Description                                        |
+|--------------------------|----------------------------------------------------|
+| `DB_POSTGRESDB_PASSWORD` | The supabase database password.                    |
+| `DB_POSTGRESDB_USER`     | The supabase database user.                        |
+| `N8N_ENCRYPTION_KEY`     | An n8n encryption key.                             |
+| `DB_POSTGRESDB_SSL_CA`   | The supabase database SSL cert.                    |
+| `DB_POSTGRESDB_HOST`     | The supabase database host.                        |
+| `DB_POSTGRESDB_PORT`     | The supabase database port.                        |
+| `DB_POSTGRESDB_DATABASE` | Set to `postgres`.                                 |
+
+| Variable                                 | Description                                        |
+|------------------------------------------|----------------------------------------------------|
+| `GENERIC_TIMEZONE`                       | The n8n generic timezone                           |
+| `TZ`                                     | The n8n timezone                                   |
+| `DB_TYPE`                                | Set to `postgres`                                  |
+| `DB_POSTGRESDB_SCHEMA`                   | Set to `public`                                    |
+| `N8N_PORT`                               | Set to `7860`                                      |
+| `N8N_PROTOCOL`                           | Set to `https`                                     |
+| `N8N_EDITOR_BASE_URL`                    | Set to `https://<username>-<space>.hf.space`       |
+| `WEBHOOK_URL`                            | Set to `https://<username>-<space>.hf.space`       |
+| `N8N_HOST`                               | Set to `<username>-<space>.hf.space`               |
+| `N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS`  | Set to `true`                                      |
+| `N8N_PUSH_BACKEND`                       | Set to `websocket`                                 |
+| `EXECUTIONS_DATA_SAVE_ON_PROGRESS`       | Set to `false`                                     |
+| `N8N_DATABASE_SSL_REJECT_UNAUTHORIZED`   | Set to `true`                                      |
+| `N8N_PROXY_HOPS`                         | Set to `1`                                         |
+| `EXECUTIONS_DATA_SAVE_ON_ERROR`          | Set to `all`                                       |
+| `EXECUTIONS_DATA_SAVE_ON_SUCCESS`        | Set to `none`                                      |
+| `EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS` | Set to `false`                                     |
+| `EXECUTIONS_DATA_PRUNE`                  | Set to `true`                                      |
+| `EXECUTIONS_DATA_MAX_AGE`                | Set to `168`                                       |
 
 ### 4. Configure GitHub Repository Secrets
 
