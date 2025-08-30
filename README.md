@@ -99,7 +99,7 @@ This project uses GitHub Actions to automate maintenance and updates.
 
 ### Automatic n8n Updates
 
-The `.github/workflows/update-n8n.yml` workflow runs daily at 3:00 AM (UTC). It performs the following steps:
+The `.github/workflows/update-n8n.yml` can triggered manually. After the n8n deploy, you can create a workeflow to trigger the github workeflow automatically.
 
 1. **Checks for new n8n versions:** It fetches the latest version tag from the official [n8n GitHub repository](https://github.com/n8n-io/n8n).
 2. **Compares versions:** It compares the latest version with the version currently specified in the `Dockerfile`.
@@ -112,7 +112,7 @@ You can also trigger this workflow manually from the **Actions** tab in your Git
 
 ### Keep-Alive Services
 
-To prevent the free tiers of Hugging Face Spaces and Supabase from being paused due to inactivity, two separate workflows run daily at 0:00 AM (UTC):
+To prevent the free tiers of Hugging Face Spaces and Supabase from being paused due to inactivity.
 
 - **Hugging Face Keep-Alive (`huggingface-keep-alive.yml`):** This workflow sends a simple `curl` request to your Hugging Face Space URL to simulate traffic.
 - **Supabase Keep-Alive (`supabase-keep-alive.yml`):** This workflow sends a `curl` request to the `keep-alive` table in your Supabase database, ensuring the database remains active.
