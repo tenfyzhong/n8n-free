@@ -97,6 +97,8 @@ To allow the GitHub Actions to update your Hugging Face Space, you need to add y
 
 This project uses GitHub Actions to automate maintenance and updates.
 
+You can import the workflow [Auto keep n8n alive and updates on n8n-free repo](Auto%20keep%20n8n%20alive%20and%20updates%20on%20n8n-free%20repo.json) into n8n to make it keep alive and update itself.
+
 ### Automatic n8n Updates
 
 The `.github/workflows/update-n8n.yml` can triggered manually. After the n8n deploy, you can create a workeflow to trigger the github workeflow automatically.

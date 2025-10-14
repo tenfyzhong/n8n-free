@@ -1,0 +1,207 @@
+{
+  "name": "Auto keep n8n alive and updates on n8n-free repo",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        80
+      ],
+      "id": "4052de94-3bb3-40d3-80a7-bd90a8b44637",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "workflow",
+        "owner": {
+          "__rl": true,
+          "value": "tenfyzhong",
+          "mode": "list",
+          "cachedResultName": "tenfyzhong",
+          "cachedResultUrl": "https://github.com/tenfyzhong"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-free",
+          "mode": "list",
+          "cachedResultName": "n8n-free",
+          "cachedResultUrl": "https://github.com/tenfyzhong/n8n-free"
+        },
+        "workflowId": {
+          "__rl": true,
+          "value": 180071887,
+          "mode": "list",
+          "cachedResultName": "Supabase Keep-Alive"
+        },
+        "ref": {
+          "__rl": true,
+          "value": "main",
+          "mode": "list",
+          "cachedResultName": "main"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        80
+      ],
+      "id": "6336a3cb-9e14-49e5-b59f-86acc71f1549",
+      "name": "Dispatch Supabase Keep-Alive workflow",
+      "webhookId": "717cdc72-c87d-4573-abb9-6b78343ad580",
+      "credentials": {
+        "githubApi": {
+          "id": "cHOJTM2BvekvIQRI",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "workflow",
+        "owner": {
+          "__rl": true,
+          "value": "tenfyzhong",
+          "mode": "list",
+          "cachedResultName": "tenfyzhong",
+          "cachedResultUrl": "https://github.com/tenfyzhong"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-free",
+          "mode": "list",
+          "cachedResultName": "n8n-free",
+          "cachedResultUrl": "https://github.com/tenfyzhong/n8n-free"
+        },
+        "workflowId": {
+          "__rl": true,
+          "value": 180069781,
+          "mode": "list",
+          "cachedResultName": "Huggingface Keep-Alive"
+        },
+        "ref": {
+          "__rl": true,
+          "value": "main",
+          "mode": "list",
+          "cachedResultName": "main"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        -112
+      ],
+      "id": "404a5cb9-7776-440c-a0ae-e86bea194077",
+      "name": "Dispatch Huggingface Keep-Alive workflow",
+      "webhookId": "23e746b7-3003-49d8-8a3b-118895ead131",
+      "credentials": {
+        "githubApi": {
+          "id": "cHOJTM2BvekvIQRI",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "workflow",
+        "owner": {
+          "__rl": true,
+          "value": "tenfyzhong",
+          "mode": "list",
+          "cachedResultName": "tenfyzhong",
+          "cachedResultUrl": "https://github.com/tenfyzhong"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-free",
+          "mode": "list",
+          "cachedResultName": "n8n-free",
+          "cachedResultUrl": "https://github.com/tenfyzhong/n8n-free"
+        },
+        "workflowId": {
+          "__rl": true,
+          "value": 179812847,
+          "mode": "list",
+          "cachedResultName": "Check for n8n Updates and Sync to Hugging Face Space"
+        },
+        "ref": {
+          "__rl": true,
+          "value": "main",
+          "mode": "list",
+          "cachedResultName": "main"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        240
+      ],
+      "id": "d0b3b0d2-2b17-4a68-9651-77ce0275f4ed",
+      "name": "Dispatch checking n8n updates workflow",
+      "webhookId": "53783f33-c4e8-4033-943e-3dedbcb60a60",
+      "credentials": {
+        "githubApi": {
+          "id": "cHOJTM2BvekvIQRI",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Dispatch Huggingface Keep-Alive workflow",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Dispatch Supabase Keep-Alive workflow",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Dispatch checking n8n updates workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "qGp71i1f6ZqXuf5H",
+    "timeSavedPerExecution": 10
+  },
+  "versionId": "6e1d9ed5-fcdd-446a-b220-79124b7a2a08",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7972fade67f74b5349f262f53ffe76745e3c2a5e28449e172ee53cd42bf67a5d"
+  },
+  "id": "P4ttR2uqaMbO57pH",
+  "tags": [
+    {
+      "createdAt": "2025-08-10T08:54:39.219Z",
+      "updatedAt": "2025-08-10T08:54:39.219Z",
+      "id": "WizGDu9CdfOnLuL7",
+      "name": "Github"
+    }
+  ]
+}
