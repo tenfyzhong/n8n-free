@@ -10,9 +10,12 @@ jobs:
       - name: Healthcheck
         run: |-
           # Make the request and capture the body and status code in variables
-          http_response=$(curl -s -w "\n%{http_code}" "${{ vars.HF_SPACE_URL }}/readiness")
+          http_response=$(curl -s -w "\n%{http_code}" "${{ vars.HF_SPACE_URL }}/healthz/readiness")
           http_body=$(echo "$http_response" | sed '$d')
           http_status=$(echo "$http_response" | tail -n1)
+
+          echo "http_body: $http_body"
+          echo "http_status: $http_status"
 
           # Check if jq is installed, and install it if it's not.
           if ! command -v jq &> /dev/null; then
