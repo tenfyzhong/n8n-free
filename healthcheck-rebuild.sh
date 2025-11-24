@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 
-# N8N_HOST=
+# HF_REPO=tenfyzhong/n8n-free
+# N8N_HOST=tenfyzhong-n8n-free.hf.space
 # TG_TOKEN=
 
 export PATH=$PATH:/usr/bin
 
+if [ -z "$HF_REPO" ]; then
+    exit 1
+fi
+
+if [ -z "$N8N_HOST" ]; then
+    exit 1
+fi
+
 notify() {
+    if [ -z "$TG_TOKEN" ]; then
+        exit 0
+    fi
     curl -X POST \
         -H "Content-Type: application/json" \
-        -d '{"chat_id": "604387802", "text": "n8n rebuilding https://huggingface.co/spaces/tenfyzhong/n8n-free/settings", "disable_notification": false}' \
+        -d "{\"chat_id\": \"604387802\", \"text\": \"n8n rebuilding https://huggingface.co/spaces/$HF_REPO/settings\", \"disable_notification\": false}" \
         "https://api.telegram.org/bot$TG_TOKEN/sendMessage"
 
 }
