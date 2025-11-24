@@ -5,6 +5,14 @@ set -eo pipefail
 # HF_REPO=tenfyzhong/n8n-free
 # N8N_HOST=tenfyzhong-n8n-free.hf.space
 # TG_TOKEN=
+# TG_CHAT_ID=
+
+for cmd in git curl jq; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "::error::This script requires '$cmd' but it's not installed. Aborting." >&2
+        exit 1
+    fi
+done
 
 export PATH=$PATH:/usr/bin
 
@@ -22,7 +30,7 @@ notify() {
     fi
     curl -X POST \
         -H "Content-Type: application/json" \
-        -d "{\"chat_id\": \"604387802\", \"text\": \"n8n rebuilding https://huggingface.co/spaces/$HF_REPO/settings\", \"disable_notification\": false}" \
+        -d "{\"chat_id\": \"$TG_CHAT_ID\", \"text\": \"n8n rebuilding https://huggingface.co/spaces/$HF_REPO/settings\", \"disable_notification\": false}" \
         "https://api.telegram.org/bot$TG_TOKEN/sendMessage"
 
 }
@@ -50,7 +58,7 @@ if [ "$http_status" -ne 200 ]; then
     echo "::error::Health check failed with status code $http_status"
     echo "Response body: $http_body"
     rebuild
-    exit 0
+    exit 1
 fi
 
 # Parse the JSON response and check the status field
@@ -60,7 +68,7 @@ if [ "$response_status" != "ok" ]; then
     echo "::error::Health check failed. Expected status 'ok', but got '$response_status'"
     echo "Response body: $http_body"
     rebuild
-    exit 0
+    exit 1
 fi
 
 echo "Health check successful!"
