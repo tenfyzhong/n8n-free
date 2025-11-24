@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
-
 # HF_REPO=tenfyzhong/n8n-free
 # N8N_HOST=tenfyzhong-n8n-free.hf.space
 # TG_TOKEN=
