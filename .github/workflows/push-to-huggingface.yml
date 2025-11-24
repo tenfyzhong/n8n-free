@@ -1,0 +1,28 @@
+name: Push to huggingface
+
+on:
+  push:
+    branches:
+      - main
+
+# Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  push-to-huggingface:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history to solve the "shallow update not allowed" error
+          fetch-depth: 0
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |-
+          git remote add space https://tenfyzhong:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/tenfyzhong/n8n-free
+          git push space main --force
+          echo "Successfully synced to Hugging Face Space!"
