@@ -43,18 +43,9 @@ jobs:
 
       - name: Commit and push if Dockerfile was changed
         if: steps.update_dockerfile.outputs.updated == 'true'
-        run: |
+        run: |-
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add Dockerfile
           git commit -m "chore: Update n8n to version ${{ steps.get_version.outputs.version }}"
           git push
-
-      - name: Push to Hugging Face Space
-        if: steps.update_dockerfile.outputs.updated == 'true'
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          git remote add space https://tenfyzhong:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/tenfyzhong/n8n-free
-          git push space main --force
-          echo "Successfully synced to Hugging Face Space!"

@@ -93,6 +93,11 @@ To allow the GitHub Actions to update your Hugging Face Space, you need to add y
 2. In your forked GitHub repository, go to **Settings > Secrets and variables > Actions**.
 3. Create a new secret named `HF_TOKEN` and paste your Hugging Face token.
 
+### 5. Health Checks
+
+You can configure a crontab to run the `healthcheck-rebuild.sh` to perform a health check of the n8n instance.
+It will try to make a commit to make it rebuild the n8n instance. You shoule pass the environment variables `HF_REPO`, `N8N_HOST`, `TG_TOKEN`(optional) to the script.
+
 ## How It Works
 
 This project uses GitHub Actions to automate maintenance and updates.
