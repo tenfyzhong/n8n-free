@@ -21,7 +21,7 @@ jobs:
       - name: Get latest n8n version
         id: get_version
         run: |
-          LATEST_VERSION=$(curl -s "https://github.com/n8n-io/n8n/releases.atom" | grep -oP '<title>n8n@\K[0-9.]+' | sort -V | tail -n1)
+          LATEST_VERSION=$(curl -s "https://github.com/n8n-io/n8n/releases.atom" | grep -oP '<title>n8n@[0-9.]+</title>' | grep -oP '<title>n8n@\K[0-9.]+' | sort -V | tail -n1)
           echo "Latest n8n version is: $LATEST_VERSION"
           echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
 
