@@ -1,42 +1,57 @@
 name: Healthcheck
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      # This is key: Grant this job permission to push commits to the repository
+      contents: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Healthcheck
+        env:
+          HF_SPACE_URL: ${{ vars.HF_SPACE_URL }}
+          HF_REPO: ${{ vars.HF_REPO }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |-
-          # Make the request and capture the body and status code in variables
-          http_response=$(curl -s -w "\n%{http_code}" "${{ vars.HF_SPACE_URL }}/healthz/readiness")
-          http_body=$(echo "$http_response" | sed '$d')
-          http_status=$(echo "$http_response" | tail -n1)
-
-          echo "http_body: $http_body"
-          echo "http_status: $http_status"
-
-          # Check if jq is installed, and install it if it's not.
-          if ! command -v jq &> /dev/null; then
-              echo "jq could not be found, installing..."
-              sudo apt-get update && sudo apt-get install -y jq
-          fi
-
-          # Check the HTTP status code
-          if [ "$http_status" -ne 200 ]; then
-            echo "::error::Health check failed with status code $http_status"
-            echo "Response body: $http_body"
+          if [ -z "$HF_SPACE_URL" ]; then
+            echo "::error::HF_SPACE_URL is not set"
             exit 1
           fi
 
-          # Parse the JSON response and check the status field
-          response_status=$(echo "$http_body" | jq -r '.status')
-
-          if [ "$response_status" != "ok" ]; then
-            echo "::error::Health check failed. Expected status 'ok', but got '$response_status'"
-            echo "Response body: $http_body"
-            exit 1
+          if echo "$HF_SPACE_URL" | grep -q "huggingface.co/spaces/"; then
+            repo_path=$(echo "$HF_SPACE_URL" | sed -E 's#^https?://##; s#^huggingface.co/spaces/##; s#/.*##')
+            if [ -z "$repo_path" ] || ! echo "$repo_path" | grep -q "/"; then
+              echo "::error::Failed to parse HF repo path from HF_SPACE_URL=$HF_SPACE_URL"
+              exit 1
+            fi
+            owner=${repo_path%%/*}
+            space=${repo_path#*/}
+            space_host="${owner}-${space}.hf.space"
+            if [ -z "$HF_REPO" ]; then
+              HF_REPO="$repo_path"
+            fi
+          else
+            space_host=$(echo "$HF_SPACE_URL" | sed -E 's#^https?://##; s#/.*##')
+            if [ -z "$space_host" ]; then
+              echo "::error::Failed to parse host from HF_SPACE_URL=$HF_SPACE_URL"
+              exit 1
+            fi
+            if [ -z "$HF_REPO" ]; then
+              owner=$(echo "$space_host" | cut -d- -f1)
+              space=$(echo "$space_host" | cut -d- -f2-)
+              HF_REPO="${owner}/${space}"
+            fi
           fi
 
-          echo "Health check successful!"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          HF_REPO="$HF_REPO" N8N_HOST="$space_host" bash healthcheck-rebuild.sh

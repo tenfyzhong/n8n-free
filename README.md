@@ -97,6 +97,8 @@ To allow the GitHub Actions to update your Hugging Face Space, you need to add y
 
 You can configure a crontab to run the `healthcheck-rebuild.sh` to perform a health check of the n8n instance.
 It will try to make a commit to make it rebuild the n8n instance. You shoule pass the environment variables `HF_REPO`, `N8N_HOST`, `TG_TOKEN`(optional) to the script.
+The GitHub Actions healthcheck workflow reuses `HF_SPACE_URL` and derives `N8N_HOST`/`HF_REPO` automatically; set `HF_REPO` as a repo variable if the derived value is incorrect.
+If you want Telegram alerts from the GitHub Actions healthcheck, add `TG_TOKEN` and `TG_CHAT_ID` as repository secrets.
 
 ## How It Works
 
