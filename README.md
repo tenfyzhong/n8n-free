@@ -150,13 +150,13 @@ Both schedules are commented out by default; uncomment them to enable cron.
 ### Health checks and rebuilds
 
 `healthcheck.yml` runs every 10 minutes and calls `healthcheck-rebuild.sh`.
-It checks `https://<N8N_HOST>/healthz/readiness` and forces a rebuild if unhealthy.
+It checks `https://<owner>-<space>.hf.space/healthz/readiness` (derived from
+`HF_REPO`) and forces a rebuild if unhealthy.
 
 To run locally:
 
 ```
 HF_REPO=<owner>/<space> \
-N8N_HOST=<owner>-<space>.hf.space \
 HF_TOKEN=<your_hf_token> \
 bash healthcheck-rebuild.sh
 ```
