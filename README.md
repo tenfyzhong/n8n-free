@@ -118,7 +118,6 @@ Variables:
 
 | Variable | Required | Description |
 | --- | --- | --- |
-| `HF_SPACE_URL` | Yes | `https://huggingface.co/spaces/<owner>/<space>` or `https://<owner>-<space>.hf.space` |
 | `HF_REPO` | Yes | Space repo path: `<owner>/<space>` |
 
 ### 7. Confirm HF_REPO is set
@@ -175,8 +174,8 @@ an in-app workflow for keep-alive and update triggers.
 
 ## Troubleshooting
 
-- **Healthcheck fails with missing HF_SPACE_URL**: Set `HF_SPACE_URL` in GitHub
-  repo variables. Use a full Space URL.
+- **Healthcheck fails with missing HF_REPO**: Set `HF_REPO` in GitHub
+  repo variables using `owner/space` format.
 - **Database SSL errors**: Ensure SSL is enabled in Supabase and
   `DB_POSTGRESDB_SSL_CA` contains the full PEM certificate.
 - **Webhooks point to the wrong host**: Align `N8N_HOST`,
