@@ -54,7 +54,17 @@ jobs:
         if: steps.update_dockerfile.outputs.updated == 'true'
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_REPO: ${{ vars.HF_REPO }}
         run: |-
-          git remote add space https://tenfyzhong:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/tenfyzhong/n8n-free
+          if [ -z "$HF_REPO" ]; then
+            echo "::error::HF_REPO is not set"
+            exit 1
+          fi
+          if ! echo "$HF_REPO" | grep -q "/"; then
+            echo "::error::HF_REPO must be in owner/space format"
+            exit 1
+          fi
+          owner=${HF_REPO%%/*}
+          git remote add space "https://${owner}:${HF_TOKEN}@huggingface.co/spaces/${HF_REPO}"
           git push space main --force
           echo "Successfully synced to Hugging Face Space!"
