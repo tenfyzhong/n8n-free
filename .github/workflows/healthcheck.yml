@@ -20,6 +20,7 @@ jobs:
           HF_REPO: ${{ vars.HF_REPO }}
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |-
           if [ -z "$HF_SPACE_URL" ]; then
             echo "::error::HF_SPACE_URL is not set"

@@ -4,6 +4,7 @@
 # N8N_HOST=tenfyzhong-n8n-free.hf.space
 # TG_TOKEN=
 # TG_CHAT_ID=
+# HF_TOKEN=
 
 for cmd in git curl jq; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -40,6 +41,8 @@ rebuild() {
     git add rebuild.txt
     git commit -m "rebuild"
     git push
+    git remote add space https://tenfyzhong:${HF_TOKEN}@huggingface.co/spaces/tenfyzhong/n8n-free
+    git push space main --force
     notify
 }
 
