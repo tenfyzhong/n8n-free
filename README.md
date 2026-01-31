@@ -135,7 +135,8 @@ Replace `tenfyzhong/n8n-free` with your Space path.
 
 ### Update n8n version
 
-Run the `update-n8n.yml` workflow manually. It:
+Run the `update-n8n.yml` workflow manually. The scheduled trigger is commented
+out; uncomment it if you want automatic updates. It:
 
 1. Checks the latest n8n version tag.
 2. Updates the `Dockerfile` tag.
@@ -150,6 +151,7 @@ Run the `update-n8n.yml` workflow manually. It:
 
 - `huggingface-keep-alive.yml` pings your Space URL.
 - `supabase-keep-alive.yml` pings the `keep-alive` table via REST.
+Both schedules are commented out by default; uncomment them to enable cron.
 
 ### Health checks and rebuilds
 
