@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # HF_REPO=owner/space
-# N8N_HOST=owner-space.hf.space
 # TG_TOKEN=
 # TG_CHAT_ID=
 # HF_TOKEN=
@@ -30,10 +29,9 @@ if [ -z "$HF_TOKEN" ]; then
     exit 1
 fi
 
-if [ -z "$N8N_HOST" ]; then
-    echo "::error::N8N_HOST is not set" >&2
-    exit 1
-fi
+owner=${HF_REPO%%/*}
+space=${HF_REPO#*/}
+N8N_HOST="${owner}-${space}.hf.space"
 
 notify() {
     if [ -z "$TG_TOKEN" ]; then
