@@ -119,17 +119,12 @@ Variables:
 | Variable | Required | Description |
 | --- | --- | --- |
 | `HF_SPACE_URL` | Yes | `https://huggingface.co/spaces/<owner>/<space>` or `https://<owner>-<space>.hf.space` |
-| `HF_REPO` | No | Override repo path: `<owner>/<space>` |
+| `HF_REPO` | Yes | Space repo path: `<owner>/<space>` |
 
-### 7. Update the Space remote in workflows and scripts
+### 7. Confirm HF_REPO is set
 
-These files hardcode the Space remote and must be updated after you fork:
-
-- `.github/workflows/push-to-huggingface.yml`
-- `.github/workflows/update-n8n.yml`
-- `healthcheck-rebuild.sh`
-
-Replace `tenfyzhong/n8n-free` with your Space path.
+`HF_REPO` is used to build the Hugging Face Space git remote. Make sure the
+Actions variable is set to `owner/space` for your fork.
 
 ## Operations and automation
 
