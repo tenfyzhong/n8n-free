@@ -10,5 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Huggingface Keep-Alive Ping
+        env:
+          HF_REPO: ${{ vars.HF_REPO }}
         run: |
-          curl "${{ vars.HF_SPACE_URL }}"
+          if [ -z "$HF_REPO" ]; then
+            echo "::error::HF_REPO is not set"
+            exit 1
+          fi
+          if ! echo "$HF_REPO" | grep -q "/"; then
+            echo "::error::HF_REPO must be in owner/space format"
+            exit 1
+          fi
+          owner=${HF_REPO%%/*}
+          space=${HF_REPO#*/}
+          space_host="${owner}-${space}.hf.space"
+          curl "https://${space_host}"

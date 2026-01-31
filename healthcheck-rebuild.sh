@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# HF_REPO=tenfyzhong/n8n-free
-# N8N_HOST=tenfyzhong-n8n-free.hf.space
+# HF_REPO=owner/space
 # TG_TOKEN=
 # TG_CHAT_ID=
 # HF_TOKEN=
@@ -16,12 +15,23 @@ done
 export PATH=$PATH:/usr/bin
 
 if [ -z "$HF_REPO" ]; then
+    echo "::error::HF_REPO is not set" >&2
     exit 1
 fi
 
-if [ -z "$N8N_HOST" ]; then
+if ! echo "$HF_REPO" | grep -q "/"; then
+    echo "::error::HF_REPO must be in owner/space format" >&2
     exit 1
 fi
+
+if [ -z "$HF_TOKEN" ]; then
+    echo "::error::HF_TOKEN is not set" >&2
+    exit 1
+fi
+
+owner=${HF_REPO%%/*}
+space=${HF_REPO#*/}
+N8N_HOST="${owner}-${space}.hf.space"
 
 notify() {
     if [ -z "$TG_TOKEN" ]; then
@@ -41,7 +51,8 @@ rebuild() {
     git add rebuild.txt
     git commit -m "rebuild"
     git push
-    git remote add space https://tenfyzhong:${HF_TOKEN}@huggingface.co/spaces/tenfyzhong/n8n-free
+    owner=${HF_REPO%%/*}
+    git remote add space "https://${owner}:${HF_TOKEN}@huggingface.co/spaces/${HF_REPO}"
     git push space main --force
     notify
 }
