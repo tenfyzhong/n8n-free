@@ -44,17 +44,18 @@ git commit -s -m "ci: derive N8N host from HF_REPO"
 
 **Step 1: Write failing verification**
 
-Run: `rg -n "N8N_HOST" README.md`
+Run: `rg -n "N8N_HOST=<" README.md`
 Expected: match in the local healthcheck example.
 
 **Step 2: Update README**
 
-- Remove `N8N_HOST` from the example.
+- Remove `N8N_HOST` from the local healthcheck example.
 - Clarify that `HF_REPO` is sufficient for local healthcheck usage.
+- Keep `N8N_HOST` mentions that refer to n8n runtime configuration.
 
 **Step 3: Re-run verification**
 
-Run: `rg -n "N8N_HOST" README.md`
+Run: `rg -n "N8N_HOST=<" README.md`
 Expected: no matches.
 
 **Step 4: Commit**
