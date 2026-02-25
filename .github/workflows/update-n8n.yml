@@ -25,6 +25,36 @@ jobs:
           echo "Latest n8n version is: $LATEST_VERSION"
           echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
 
+      - name: Check if latest version is blacklisted
+        id: check_blacklist
+        run: |
+          LATEST_VERSION="${{ steps.get_version.outputs.version }}"
+          BLOCKLIST_FILE="version-blocklist.txt"
+
+          if [ ! -f "$BLOCKLIST_FILE" ]; then
+            echo "::warning::${BLOCKLIST_FILE} not found. No versions are blocked."
+            echo "is_blacklisted=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          IS_BLACKLISTED=false
+          while IFS= read -r line || [ -n "$line" ]; do
+            VERSION=$(echo "$line" | sed 's/#.*//' | xargs)
+            [ -z "$VERSION" ] && continue
+            if [ "$VERSION" = "$LATEST_VERSION" ]; then
+              IS_BLACKLISTED=true
+              break
+            fi
+          done < "$BLOCKLIST_FILE"
+
+          if [ "$IS_BLACKLISTED" = "true" ]; then
+            echo "Version $LATEST_VERSION is blacklisted. Skipping auto update."
+            echo "is_blacklisted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version $LATEST_VERSION is allowed."
+            echo "is_blacklisted=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Get current version from Dockerfile
         id: get_current_version
         run: |
@@ -34,7 +64,7 @@ jobs:
 
       - name: Compare versions and update Dockerfile
         id: update_dockerfile
-        if: steps.get_version.outputs.version != steps.get_current_version.outputs.version && steps.get_version.outputs.version != ''
+        if: steps.check_blacklist.outputs.is_blacklisted != 'true' && steps.get_version.outputs.version != steps.get_current_version.outputs.version && steps.get_version.outputs.version != ''
         run: |
           echo "New version found. Updating Dockerfile..."
           sed -i "s/n8nio\/n8n:${{ steps.get_current_version.outputs.version }}/n8nio\/n8n:${{ steps.get_version.outputs.version }}/g" Dockerfile

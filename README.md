@@ -133,9 +133,13 @@ Run the `update-n8n.yml` workflow manually. The scheduled trigger is commented
 out; uncomment it if you want automatic updates. It:
 
 1. Checks the latest n8n version tag.
-2. Updates the `Dockerfile` tag.
-3. Commits the change.
-4. Pushes to the Hugging Face Space.
+2. Checks `version-blocklist.txt` (currently includes `2.10.0`).
+3. Updates the `Dockerfile` tag only when the latest version is not blacklisted.
+4. Commits the change.
+5. Pushes to the Hugging Face Space.
+
+To block additional versions, edit `version-blocklist.txt` and add one version
+per line.
 
 ### Push to Hugging Face on every commit
 
