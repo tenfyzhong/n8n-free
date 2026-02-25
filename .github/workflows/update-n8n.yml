@@ -18,12 +18,23 @@ jobs:
           # Fetch all history to solve the "shallow update not allowed" error
           fetch-depth: 0
 
-      - name: Get latest n8n version
+      - name: Get latest stable n8n version
         id: get_version
         run: |
-          LATEST_VERSION=$(curl -s "https://github.com/n8n-io/n8n/releases.atom" | sed -n 's/\s*<title>n8n@\([0-9.]\+\)<\/title>/\1/p' | sort -V | tail -n1)
-          echo "Latest n8n version is: $LATEST_VERSION"
-          echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          API_URL="https://api.github.com/repos/n8n-io/n8n/releases/latest"
+          LATEST_TAG=$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            "$API_URL" | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n1)
+          LATEST_VERSION=$(echo "$LATEST_TAG" | sed -n 's/^n8n@\([0-9.]\+\)$/\1/p')
+
+          if [ -z "$LATEST_VERSION" ]; then
+            echo "::error::Failed to parse latest stable n8n version from tag: ${LATEST_TAG:-<empty>}"
+            exit 1
+          fi
+
+          echo "Latest stable n8n version is: $LATEST_VERSION"
+          echo "version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Check if latest version is blacklisted
         id: check_blacklist

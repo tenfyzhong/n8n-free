@@ -132,7 +132,7 @@ Actions variable is set to `owner/space` for your fork.
 Run the `update-n8n.yml` workflow manually. The scheduled trigger is commented
 out; uncomment it if you want automatic updates. It:
 
-1. Checks the latest n8n version tag.
+1. Checks the latest stable n8n version tag via GitHub `releases/latest` API (pre-releases are excluded).
 2. Checks `version-blocklist.txt` (currently includes `2.10.0`).
 3. Updates the `Dockerfile` tag only when the latest version is not blacklisted.
 4. Commits the change.
