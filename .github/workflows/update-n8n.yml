@@ -9,13 +9,11 @@ jobs:
   check-and-update:
     runs-on: ubuntu-latest
     permissions:
-      # This is key: Grant this job permission to push commits to the repository
       contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Fetch all history to solve the "shallow update not allowed" error
           fetch-depth: 0
 
       - name: Get latest stable n8n version
@@ -69,7 +67,7 @@ jobs:
       - name: Get current version from Dockerfile
         id: get_current_version
         run: |
-          CURRENT_VERSION=$(grep -oP 'n8nio/n8n:\K[0-9.]+' Dockerfile)
+          CURRENT_VERSION=$(grep -oP 'npm install -g n8n@\K[0-9.]+' Dockerfile)
           echo "Current version in Dockerfile is: $CURRENT_VERSION"
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
@@ -78,7 +76,7 @@ jobs:
         if: steps.check_blacklist.outputs.is_blacklisted != 'true' && steps.get_version.outputs.version != steps.get_current_version.outputs.version && steps.get_version.outputs.version != ''
         run: |
           echo "New version found. Updating Dockerfile..."
-          sed -i "s/n8nio\/n8n:${{ steps.get_current_version.outputs.version }}/n8nio\/n8n:${{ steps.get_version.outputs.version }}/g" Dockerfile
+          sed -i "s/npm install -g n8n@${{ steps.get_current_version.outputs.version }}/npm install -g n8n@${{ steps.get_version.outputs.version }}/g" Dockerfile
           echo "Dockerfile updated."
           echo "updated=true" >> $GITHUB_OUTPUT
 
@@ -88,7 +86,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add Dockerfile
-          git commit -m "chore: Update n8n to version ${{ steps.get_version.outputs.version }}"
+          git commit -s -m "chore: Update n8n to version ${{ steps.get_version.outputs.version }}"
           git push
 
       - name: Push to Hugging Face Space
